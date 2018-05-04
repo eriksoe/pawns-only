@@ -1,0 +1,8 @@
+
+# Generated:
+*.pyc
+
+# Backup:
+*.bak
+*.old
+*~
