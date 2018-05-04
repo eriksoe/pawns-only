@@ -13,7 +13,7 @@ def generateMoves(board, color):
     for y in xrange(0,8):
         for x in xrange(0,8):
             cell = board.cell(x, y)
-            if cell.__class__ != color: continue
+            if not cell.hasColor(color): continue
             print cell
             
 

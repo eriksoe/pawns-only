@@ -3,6 +3,12 @@
 
 class Cell:
     def __init__(self): pass
+    # To implement: toString(); isEmpty()
+
+    def hasColor(self, color):
+        return self.__class__ == color
+    
+class EmptyCell(Cell):
     def toString(self, x, y): return "⧠ " if ((x+y)%2)==0 else "▨ "
     def isEmpty(self): return True
 
@@ -14,7 +20,7 @@ class Black(Cell):
     def toString(self, x, y): return "♟ "
     def isEmpty(self): return False
 
-def empty_row(): return 8 * [Cell()]
+def empty_row(): return 8 * [EmptyCell()]
 def black_row(): return 8 * [Black()]
 def white_row(): return 8 * [White()]
 
@@ -54,15 +60,17 @@ class Board:
             s += line + "\n"
         return s
 
+    "Cell access:"
     def cell(self, x, y):
         return self.b[y][x]
-    
+                
+    "Moving:"
     def move(self, src, dst):
         (sx,sy) = src
         (dx,dy) = dst
         old = self.b[dy][dx]
         self.b[dy][dx] = self.b[sy][sx]
-        self.b[sy][sx] = Cell()
+        self.b[sy][sx] = EmptyCell()
         return Undoing(self, src, dst, old)
 
     def replaceCell(self, dst, oldCell):
