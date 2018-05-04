@@ -20,6 +20,9 @@ class Black(Cell):
     def toString(self, x, y): return "♟ "
     def isEmpty(self): return False
 
+White.otherColor = Black
+Black.otherColor = White
+    
 def empty_row(): return 8 * [EmptyCell()]
 def black_row(): return 8 * [Black()]
 def white_row(): return 8 * [White()]
@@ -63,6 +66,9 @@ class Board:
     "Cell access:"
     def cell(self, x, y):
         return self.b[y][x]
+
+    def withinBounds(self, x, y):
+        return x>=0 and y>=0 and x<8 and y<8
                 
     "Moving:"
     def move(self, src, dst):

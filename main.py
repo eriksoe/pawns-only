@@ -10,8 +10,8 @@ undo2 = board.move((1,6), (1,4))
 
 print(board.toString())
 
-undo2.undo()
-undo1.undo()
+#undo2.undo()
+#undo1.undo()
 
 print(board.toString())
 
