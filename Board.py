@@ -5,13 +5,12 @@ ansiNormal = "\x1b[0m"
 ansiBold = "\x1b[1m"
 ansiTargetColor = "\x1b[1;102m" # Green
 ansiIntermedColor = "\x1b[1;103m" # Yellow
-#ansiColor = "\x1b[1;36m"
 ansiColorNormal = "\x1b[00m"
-ansiWhite = "\x1b[37m"
-ansiBlack = "\x1b[30m"
+ansiWhiteFG = "\x1b[38;5;231m"
+ansiBlackFG = "\x1b[30m"
 
 #ansiWhiteBG = "\x1b[107;30m"
-ansiBlackBG = "\x1b[40;97m"
+#ansiBlackBG = "\x1b[40;97m"
 ansiWhiteBG = "\x1b[48;5;231;30m"
 ansiBlackBG = "\x1b[40;38;5;231m"
 
@@ -28,22 +27,22 @@ class Cell:
 
     def _isBlackSquare(self, x, y):
         return (x+y)%2 == 0
-    def _paintSqr(self, x, y, sw, sb):
-#        if self._isBlackSquare(x,y):
-        return (ansiBlackBG+sb if self._isBlackSquare(x, y) else ansiWhiteBG+sw)+ ansiNormal
+    def _paintSqr(self, x, y, sw, sb, preferBBG, bgColor):
+        if bgColor == None:
+            isBlackSquare = self._isBlackSquare(x, y)
+            return (ansiBlackBG+sb if isBlackSquare else ansiWhiteBG+sw) + ansiNormal
+        else:
+            return bgColor + (ansiWhiteFG+sb if preferBBG else ansiBlackFG+sw) + ansiNormal
         
     
 class EmptyCell(Cell):
-#    def toString(self, x, y): return "⧠ " if ((x+y)%2)==0 else "▨ "
-    def toString(self, x, y):
-        return self._paintSqr(x, y, "  ", "  ")
-#        return (ansiBlack if self._isBlackSquare(x, y) else ansiWhite)+ "██" + ansiNormal
+    def toString(self, x, y, bgColor=None):
+        return self._paintSqr(x, y, "  ", "  ", False, bgColor)
     def isEmpty(self): return True
 
 class White(Cell):
-    def toString(self, x, y):
-        return self._paintSqr(x, y, unfilledPiece, filledPiece)
-        #return "♙ "
+    def toString(self, x, y, bgColor=None):
+        return self._paintSqr(x, y, unfilledPiece, filledPiece, True, bgColor)
     def isEmpty(self): return False
 
     name = "White"
@@ -52,9 +51,8 @@ class White(Cell):
     goalRow = 7
 
 class Black(Cell):
-    def toString(self, x, y):
-        #return "♟ "
-        return self._paintSqr(x, y, filledPiece, unfilledPiece)
+    def toString(self, x, y, bgColor = None):
+        return self._paintSqr(x, y, filledPiece, unfilledPiece, False, bgColor)
     def isEmpty(self): return False
 
     name = "Black"
@@ -101,9 +99,7 @@ class Board:
             for x in xrange(8):
                 c = row[x]
                 emph = self.calcEmph((x, y), emphMove)
-                if emph != None: line += emph[0]
-                line += c.toString(x, y)
-                if emph != None: line += emph[1]
+                line += c.toString(x, y, emph)
             s += line + "\n"
         return s
 
@@ -111,11 +107,11 @@ class Board:
         if emphMove == None:
             return None
         if pos == emphMove.dst:
-            return (ansiTargetColor, ansiNormal)
+            return ansiTargetColor
         if pos == emphMove.src:
-            return (ansiIntermedColor, ansiNormal)
+            return ansiIntermedColor
         if pos in emphMove.intermediate:
-            return (ansiIntermedColor, ansiNormal)
+            return ansiIntermedColor
         return None
 
     "Cell access:"
