@@ -34,6 +34,12 @@ def white_row(): return 8 * [White()]
 # SQUARE WITH CONTOURED OUTLINE (⧠)
 sqr1 = "▨"
 
+ansiNormal = "\x1b[0m"
+ansiBold = "\x1b[1m"
+ansiColor = "\x1b[1;102m"
+#ansiColor = "\x1b[1;36m"
+ansiColorNormal = "\x1b[00m"
+
 class Board:
     
     def __init__(self):
@@ -48,18 +54,20 @@ class Board:
             empty_row()
             ]
         
-    def toString(self):
+    def toString(self, emphPos=None):
         s = ""
+        (ex,ey) = emphPos if emphPos != None else (-1,-1)
+    
         rows = list(self.b)
-        rows.reverse()
-        y = 0
-        for row in rows:
-            y += 1
+        for y0 in xrange(8):
+            y = 7 - y0
+            row  = rows[y]
             line = ""
-            x = 0
-            for c in row:
-                x += 1
+            for x in xrange(8):
+                c = row[x]
+                if (x,y) == emphPos: line += ansiColor
                 line += c.toString(x, y)
+                if (x,y) == emphPos: line += ansiNormal
             s += line + "\n"
         return s
 

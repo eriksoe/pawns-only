@@ -17,5 +17,5 @@ while True:
     undoHandle = move.apply()
     curPlayer = curPlayer.otherColor
 
-    print(board.toString())
+    print(board.toString(move.dst))
     
