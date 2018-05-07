@@ -1,6 +1,23 @@
 # -*- encoding: utf-8 -*-
 #export Board
 
+ansiNormal = "\x1b[0m"
+ansiBold = "\x1b[1m"
+ansiTargetColor = "\x1b[1;102m" # Green
+ansiIntermedColor = "\x1b[1;103m" # Yellow
+#ansiColor = "\x1b[1;36m"
+ansiColorNormal = "\x1b[00m"
+ansiWhite = "\x1b[37m"
+ansiBlack = "\x1b[30m"
+
+#ansiWhiteBG = "\x1b[107;30m"
+ansiBlackBG = "\x1b[40;97m"
+ansiWhiteBG = "\x1b[48;5;231;30m"
+ansiBlackBG = "\x1b[40;38;5;231m"
+
+unfilledPiece = "♙ "
+filledPiece = "♟ "
+
 class Cell:
     def __init__(self): pass
     # To implement: toString(); isEmpty()
@@ -8,13 +25,25 @@ class Cell:
 
     def hasColor(self, color):
         return self.__class__ == color
+
+    def _isBlackSquare(self, x, y):
+        return (x+y)%2 == 0
+    def _paintSqr(self, x, y, sw, sb):
+#        if self._isBlackSquare(x,y):
+        return (ansiBlackBG+sb if self._isBlackSquare(x, y) else ansiWhiteBG+sw)+ ansiNormal
+        
     
 class EmptyCell(Cell):
-    def toString(self, x, y): return "⧠ " if ((x+y)%2)==0 else "▨ "
+#    def toString(self, x, y): return "⧠ " if ((x+y)%2)==0 else "▨ "
+    def toString(self, x, y):
+        return self._paintSqr(x, y, "  ", "  ")
+#        return (ansiBlack if self._isBlackSquare(x, y) else ansiWhite)+ "██" + ansiNormal
     def isEmpty(self): return True
 
 class White(Cell):
-    def toString(self, x, y): return "♙ "
+    def toString(self, x, y):
+        return self._paintSqr(x, y, unfilledPiece, filledPiece)
+        #return "♙ "
     def isEmpty(self): return False
 
     name = "White"
@@ -23,7 +52,9 @@ class White(Cell):
     goalRow = 7
 
 class Black(Cell):
-    def toString(self, x, y): return "♟ "
+    def toString(self, x, y):
+        #return "♟ "
+        return self._paintSqr(x, y, filledPiece, unfilledPiece)
     def isEmpty(self): return False
 
     name = "Black"
@@ -44,13 +75,6 @@ def white_row(): return 8 * [White()]
 # SQUARE WITH UPPER RIGHT TO LOWER LEFT FILL (▨)
 # SQUARE WITH CONTOURED OUTLINE (⧠)
 sqr1 = "▨"
-
-ansiNormal = "\x1b[0m"
-ansiBold = "\x1b[1m"
-ansiTargetColor = "\x1b[1;102m" # Green
-ansiIntermedColor = "\x1b[1;103m" # Yellow
-#ansiColor = "\x1b[1;36m"
-ansiColorNormal = "\x1b[00m"
 
 class Board:
     

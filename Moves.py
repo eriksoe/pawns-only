@@ -20,8 +20,6 @@ class Move:
         (dx,dy) = self.dst
         return "(%d,%d)->(%d,%d)" % (sx, sy, dx, dy)
 
-print(Move(None, (1,2), (3,4)))
-
 
 def generateMoves(board, color):
     moves = []
