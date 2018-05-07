@@ -14,7 +14,7 @@ while True:
 
     move = random.choice(moves)
     move.apply()
-    print(board.toString(move.dst))
+    print(board.toString(move))
 
     isWin = move.dst[1] == curPlayer.goalRow
     if isWin:

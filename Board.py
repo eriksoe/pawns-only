@@ -47,7 +47,8 @@ sqr1 = "▨"
 
 ansiNormal = "\x1b[0m"
 ansiBold = "\x1b[1m"
-ansiColor = "\x1b[1;102m"
+ansiTargetColor = "\x1b[1;102m" # Green
+ansiIntermedColor = "\x1b[1;103m" # Yellow
 #ansiColor = "\x1b[1;36m"
 ansiColorNormal = "\x1b[00m"
 
@@ -65,9 +66,8 @@ class Board:
             empty_row()
             ]
         
-    def toString(self, emphPos=None):
+    def toString(self, emphMove=None):
         s = ""
-        (ex,ey) = emphPos if emphPos != None else (-1,-1)
     
         rows = list(self.b)
         for y0 in xrange(8):
@@ -76,11 +76,23 @@ class Board:
             line = ""
             for x in xrange(8):
                 c = row[x]
-                if (x,y) == emphPos: line += ansiColor
+                emph = self.calcEmph((x, y), emphMove)
+                if emph != None: line += emph[0]
                 line += c.toString(x, y)
-                if (x,y) == emphPos: line += ansiNormal
+                if emph != None: line += emph[1]
             s += line + "\n"
         return s
+
+    def calcEmph(self, pos, emphMove):
+        if emphMove == None:
+            return None
+        if pos == emphMove.dst:
+            return (ansiTargetColor, ansiNormal)
+        if pos == emphMove.src:
+            return (ansiIntermedColor, ansiNormal)
+        if pos in emphMove.intermediate:
+            return (ansiIntermedColor, ansiNormal)
+        return None
 
     "Cell access:"
     def cell(self, x, y):

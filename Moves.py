@@ -1,10 +1,11 @@
 from Board import White, Black
 
 class Move:
-    def __init__(self, board, src, dst):
+    def __init__(self, board, src, dst, intermediate=[]):
         self.board = board
         self.src = src
         self.dst = dst
+        self.intermediate = intermediate
 
     def apply(self):
         self.board.move(self.src, self.dst)
@@ -40,7 +41,7 @@ def generateMoves(board, color):
                 # Also try two ahead - but only if one ahead is possible:
                 y2 = y + 2*deltaY
                 if y==homeY and board.withinBounds(x,y2) and board.cell(x,y2).isEmpty():
-                    moves.append(Move(board, src, (x,y2)))
+                    moves.append(Move(board, src, (x,y2), [(x,y+deltaY)]))
 
             # Try to take opponent's piece:
             y2 = y + deltaY
