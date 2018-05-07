@@ -1,18 +1,21 @@
 from Board import *
 from Moves import *
+import random
 
 board = Board()
 
 print(board.toString())
+curPlayer = White
+while True:
+    moves = generateMoves(board, curPlayer)
+    if len(moves) == 0:
+        print "Game over!"
+        break
 
-undo1 = board.move((0,1), (0,3))
-undo2 = board.move((1,6), (1,4))
+    move = random.choice(moves)
 
-print(board.toString())
+    undoHandle = move.apply()
+    curPlayer = curPlayer.otherColor
 
-#undo2.undo()
-#undo1.undo()
-
-print(board.toString())
-
-moves = generateMoves(board, White)
+    print(board.toString())
+    

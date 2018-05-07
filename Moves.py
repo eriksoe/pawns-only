@@ -51,8 +51,6 @@ def generateMoves(board, color):
                 moves.append(Move(board, src, (x2,y2)))
 
 
-    print moves
-    print len(moves)
     return moves
                           
             
