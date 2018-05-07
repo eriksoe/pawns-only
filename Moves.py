@@ -29,8 +29,9 @@ def generateMoves(board, color):
             src = (x,y)
             cell = board.cell(x, y)
             if not cell.hasColor(color): continue
-            deltaY = 1 if color == White else -1
-            homeY = 1 if color == White else 6
+
+            deltaY = color.playDirection
+            homeY = color.homeRow
 
             y2 = y + deltaY
             if board.withinBounds(x,y2) and board.cell(x,y2).isEmpty():

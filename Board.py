@@ -4,6 +4,7 @@
 class Cell:
     def __init__(self): pass
     # To implement: toString(); isEmpty()
+    # Color properties: name; homeRow; goalRow; playDirection
 
     def hasColor(self, color):
         return self.__class__ == color
@@ -16,9 +17,19 @@ class White(Cell):
     def toString(self, x, y): return "♙ "
     def isEmpty(self): return False
 
+    name = "White"
+    playDirection = 1
+    homeRow = 1
+    goalRow = 7
+
 class Black(Cell):
     def toString(self, x, y): return "♟ "
     def isEmpty(self): return False
+
+    name = "Black"
+    playDirection = -1
+    homeRow = 6
+    goalRow = 0
 
 White.otherColor = Black
 Black.otherColor = White

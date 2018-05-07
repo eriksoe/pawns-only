@@ -9,13 +9,17 @@ curPlayer = White
 while True:
     moves = generateMoves(board, curPlayer)
     if len(moves) == 0:
-        print "Game over!"
+        print "Game over - tie!"
         break
 
     move = random.choice(moves)
-
-    undoHandle = move.apply()
-    curPlayer = curPlayer.otherColor
-
+    move.apply()
     print(board.toString(move.dst))
+
+    isWin = move.dst[1] == curPlayer.goalRow
+    if isWin:
+        print "Game over - %s won!" % curPlayer.name
+        break
+
+    curPlayer = curPlayer.otherColor
     
