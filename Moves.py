@@ -20,6 +20,9 @@ class Move:
         (dx,dy) = self.dst
         return "(%d,%d)->(%d,%d)" % (sx, sy, dx, dy)
 
+    def __eq__(self, other):
+        return other.__class__ == self.__class__ and (self.src, self.dst) == (other.src, other.dst)
+
 
 def generateMoves(board, color):
     moves = []
