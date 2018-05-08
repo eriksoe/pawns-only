@@ -16,6 +16,7 @@ ansiBlackBG = "\x1b[40;38;5;231m"
 
 unfilledPiece = "♙ "
 filledPiece = "♟ "
+dot = "⦿"
 
 class Cell:
     def __init__(self): pass
@@ -37,6 +38,8 @@ class Cell:
     
 class EmptyCell(Cell):
     def toString(self, x, y, bgColor=None):
+        if bgColor != None:
+            return self._paintSqr(x, y, dot+" ", dot+" ", False, None)
         return self._paintSqr(x, y, "  ", "  ", False, bgColor)
     def isEmpty(self): return True
 
