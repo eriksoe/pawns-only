@@ -1,5 +1,7 @@
 import Moves
 import random
+import sys
+import re
 
 class Player:
     def __init__(self):
@@ -27,6 +29,28 @@ class HumanPlayer(Player):
         
     def selectMove(self, board):
         validMoves = Moves.generateMoves(board, self.color)
-        print(validMoves) # TODO
-        
+        while True:
+            sys.stderr.write("Your move> ")
+            #sys.stderr.flush()
+            line = sys.stdin.readline()
+            move = self.parseMove(line, board)
+            if move in validMoves:
+                return move
+            else:
+                sys.stderr.write("Invalid move :-(\n")
+
+    def parseMove(self, line, board):
+        m = re.match("^\\s*([a-h])([1-8])\\s*-\\s*([a-h])([1-8])\\s*$",
+                     line)
+        if m==None:
+            return None
+
+        def col(s): return ord(s)-ord("a")
+        def row(s): return ord(s)-ord("1")
+        src = (col(m.group(1)), row(m.group(2)))
+        dst = (col(m.group(3)), row(m.group(4)))
+        return Moves.Move(board, src, dst)
+    
+    
+
 

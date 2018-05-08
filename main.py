@@ -4,6 +4,6 @@ from Game import *
 from Player import *
 import random
 
-game = Game(RandomPlayer(), RandomPlayer())
+game = Game(HumanPlayer(), RandomPlayer())
 winner = game.play()
 print "Winner: %s" % (winner,)
