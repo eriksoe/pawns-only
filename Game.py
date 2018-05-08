@@ -18,8 +18,8 @@ class Game:
         players = [(p1, White), (p2, Black)]
         turn = 0
         while True:
-            turn += 1
             (curPlayer, curColor) = players[turn % 2]
+            turn += 1
             
             moves = generateMoves(board, curColor)
             if len(moves) == 0:
@@ -33,7 +33,8 @@ class Game:
                 print("** "+errmsg)
                 print("** Valid moves: %s" % (moves,))
                 raise Error(errmsg)
-            
+
+            print "%s's move: %s" % (curColor.name, move)
             move.apply()
             print(board.toString(move))
         
