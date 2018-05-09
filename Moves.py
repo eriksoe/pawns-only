@@ -8,7 +8,7 @@ class Move:
         self.intermediate = intermediate
 
     def apply(self):
-        self.board.move(self.src, self.dst)
+        return self.board.move(self.src, self.dst)
 
     def __str__(self):
         (sx,sy) = self.src

@@ -1,3 +1,4 @@
+#!/usr/bin/env python2.7
 from Board import *
 from Moves import *
 from Game import *
