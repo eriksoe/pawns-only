@@ -42,7 +42,8 @@ class EmptyCell(Cell):
             return self._paintSqr(x, y, dot+" ", dot+" ", False, None)
         return self._paintSqr(x, y, "  ", "  ", False, bgColor)
     def isEmpty(self): return True
-
+    flavourNr = 0
+    
 class White(Cell):
     def toString(self, x, y, bgColor=None):
         return self._paintSqr(x, y, unfilledPiece, filledPiece, True, bgColor)
@@ -52,12 +53,13 @@ class White(Cell):
     playDirection = 1
     homeRow = 1
     goalRow = 7
+    flavourNr = 1
 
 class Black(Cell):
     def toString(self, x, y, bgColor = None):
         return self._paintSqr(x, y, filledPiece, unfilledPiece, False, bgColor)
     def isEmpty(self): return False
-
+    flavourNr = 2
     name = "Black"
     playDirection = -1
     homeRow = 6
@@ -90,6 +92,7 @@ class Board:
             black_row(),
             empty_row()
             ]
+        self.curColor = White
         
     def toString(self, emphMove=None):
         s = ""
@@ -131,11 +134,13 @@ class Board:
         old = self.b[dy][dx]
         self.b[dy][dx] = self.b[sy][sx]
         self.b[sy][sx] = EmptyCell()
+        self.curColor = self.curColor.otherColor
         return Undoing(self, src, dst, old)
 
     def replaceCell(self, dst, oldCell):
         (dx,dy) = dst
         self.b[dy][dx] = oldCell        
+        self.curColor = self.curColor.otherColor
 
 class Undoing:
     def __init__(self, board, src, dst, oldCell):

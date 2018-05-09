@@ -6,6 +6,9 @@ class Game:
         self.player1 = p1
         self.player2 = p2
 
+    def playerForColor(self, color):
+        return self.player1 if color == White else self.player2
+        
     def play(self):
         board = Board()
 
@@ -15,11 +18,13 @@ class Game:
         
         print(board.toString())
 
-        players = [(p1, White), (p2, Black)]
-        turn = 0
+        #players = [(p1, White), (p2, Black)]
+        #turn = 0
         while True:
-            (curPlayer, curColor) = players[turn % 2]
-            turn += 1
+            #(curPlayer, curColor) = players[turn % 2]
+            #turn += 1
+            curColor = board.curColor
+            curPlayer = self.playerForColor(curColor)
             
             moves = generateMoves(board, curColor)
             if len(moves) == 0:
