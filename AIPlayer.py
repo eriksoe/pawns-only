@@ -62,7 +62,7 @@ class AIPlayer(Player):
         factor = 1 if self.color == White else -1
 
         v0 = self.brain.evaluate(board)
-        print "Valuation: %s" % v0
+        #print "Valuation: %s" % v0
         
         validMoves = Moves.generateMoves(board, self.color)
         (bestMove, bestScore) = (None, -100 * factor)
@@ -76,6 +76,6 @@ class AIPlayer(Player):
             if score * factor > bestScore * factor:
                 (bestMove, bestScore) = (move, score)
                 c = "*"
-            print "  %c %s: %5.3f" % (c, move, score)
+            #print "  %c %s: %5.3f" % (c, move, score)
         
         return bestMove
