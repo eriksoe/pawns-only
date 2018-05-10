@@ -93,6 +93,7 @@ class Board:
             empty_row()
             ]
         self.curColor = White
+        self.turns = 0
         
     def toString(self, emphMove=None):
         s = ""
@@ -129,18 +130,25 @@ class Board:
                 
     "Moving:"
     def move(self, src, dst):
+        undoing = self.doMove(src, dst)
+        self.adjustTurn(1)
+        return undoing
+
+    def doMove(self, src, dst):
         (sx,sy) = src
         (dx,dy) = dst
         old = self.b[dy][dx]
         self.b[dy][dx] = self.b[sy][sx]
         self.b[sy][sx] = EmptyCell()
-        self.curColor = self.curColor.otherColor
         return Undoing(self, src, dst, old)
+
+    def adjustTurn(self, delta):
+        self.curColor = self.curColor.otherColor
+        self.turns += delta
 
     def replaceCell(self, dst, oldCell):
         (dx,dy) = dst
         self.b[dy][dx] = oldCell        
-        self.curColor = self.curColor.otherColor
 
 class Undoing:
     def __init__(self, board, src, dst, oldCell):
@@ -150,5 +158,6 @@ class Undoing:
         self.oldCell = oldCell
 
     def undo(self):
-        self.board.move(self.dst, self.src) # Move back
+        self.board.doMove(self.dst, self.src) # Move back
         self.board.replaceCell(self.dst, self.oldCell)
+        self.board.adjustTurn(-1)

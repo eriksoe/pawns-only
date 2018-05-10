@@ -2,13 +2,17 @@ from Board import *
 from Moves import *
 
 class Game:
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, quiet=False):
         self.player1 = p1
         self.player2 = p2
+        self.quiet = quiet
 
     def playerForColor(self, color):
         return self.player1 if color == White else self.player2
-        
+
+    def say(self, msg):
+        if not self.quiet: print(msg)
+    
     def play(self):
         board = Board()
 
@@ -16,7 +20,7 @@ class Game:
         p1.setColor(White)
         p2.setColor(Black)
         
-        print(board.toString())
+        if not self.quiet: print(board.toString())
 
         #players = [(p1, White), (p2, Black)]
         #turn = 0
@@ -25,27 +29,32 @@ class Game:
             #turn += 1
             curColor = board.curColor
             curPlayer = self.playerForColor(curColor)
-            
+
             moves = generateMoves(board, curColor)
             if len(moves) == 0:
-                print "Game over - tie!"
-                winner = None
+                self.say("Game over - tie!")
+                winner = (None, EmptyCell)
                 break
 
+            oldTurns = board.turns
             move = curPlayer.selectMove(board)
             if move not in moves:
                 errmsg = "Invalid move! %s by %s (%s)" % (move, curColor.name, curPlayer)
                 print("** "+errmsg)
                 print("** Valid moves: %s" % (moves,))
-                raise Error(errmsg)
+                raise Exception(errmsg)
+            if board.turns != oldTurns:
+                errmsg = "Player cheated!? (color=%s, move=%s, turns=%d/%d)" % (curColor.name, move, oldTurns, board.turns)
+                print("** "+errmsg)
+                raise Exception(errmsg)
 
-            print "%s's move: %s" % (curColor.name, move)
+            self.say("%s's move: %s" % (curColor.name, move))
             move.apply()
-            print(board.toString(move))
+            if not self.quiet: print(board.toString(move))
         
             isWin = move.dst[1] == curColor.goalRow
             if isWin:
-                print "Game over - %s (%s) won!" % (curColor.name, curPlayer)
+                self.say("Game over - %s (%s) won!" % (curColor.name, curPlayer))
                 winner = (curPlayer, curColor)
                 break
         
